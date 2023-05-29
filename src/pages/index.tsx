@@ -1,3 +1,5 @@
+import Header from '@/components/loginAndSignUp/header'
+import Login from '@/components/loginAndSignUp/login'
 import Image from 'next/image'
 
 export default function Home() {
@@ -11,7 +13,7 @@ export default function Home() {
          lg:p-4 lg:border-0">
           The wicked wallet
         </h1>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
+        <div className="fixed bottom-0 left-0 flex h-fit w-full items-end justify-center lg:static lg:h-auto lg:w-auto">
           <a
             className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
             href="https://www.wickedcranium.com/"
@@ -29,19 +31,10 @@ export default function Home() {
           </a>
         </div>
       </div>
-
-      <div className="relative flex place-items-center">
+      <div className="relative place-items-center">
+        <Header />
         <div>
-          <Image
-            src={"/skulls-back-skulls.png"}
-            alt="Wicked Craniums"
-            width={100}
-            height={100}
-            priority
-          />
-        </div>
-        <div>
-          
+          <Login />
         </div>
       </div>
     </main>
