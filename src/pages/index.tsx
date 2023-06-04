@@ -1,5 +1,6 @@
 import Header from '@/components/loginAndSignUp/header'
 import Login from '@/components/loginAndSignUp/login'
+import Footer from '@/components/shared/footer'
 import Image from 'next/image'
 
 export default function Home() {
