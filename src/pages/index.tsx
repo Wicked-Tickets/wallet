@@ -1,6 +1,7 @@
 import Header from '@/components/loginAndSignUp/header'
 import Login from '@/components/loginAndSignUp/login'
 import Signup from '@/components/loginAndSignUp/signUp'
+import Footer from '@/components/shared/footer'
 import Image from 'next/image'
 import { useState } from 'react'
 
@@ -21,7 +22,7 @@ export default function Home() {
          lg:p-4 lg:border-0">
           The wicked wallet
         </h1>
-        <div className="fixed bottom-0 left-0 flex h-fit w-full items-end justify-center lg:static lg:h-auto lg:w-auto">
+        <div className="fixed bottom-10 left-0 flex h-fit w-full items-end justify-center lg:static lg:h-auto lg:w-auto">
           <a
             className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
             href="https://www.wickedcranium.com/"
@@ -39,7 +40,7 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <div className="flex flex-col mt-56 relative place-items-center">
+      <div className="flex flex-col mt-40 relative place-items-center">
         <Header />
         <div className='lg:w-1/3'>
           {!showSignup 
@@ -57,6 +58,7 @@ export default function Home() {
             </>}
         </div>
       </div>
+      <Footer />
     </main>
   )
 }

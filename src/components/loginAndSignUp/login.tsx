@@ -37,6 +37,9 @@ const Login = () => {
 				placeholder= "Passphrase"
 				handleChange={handlePassphrase}
 			/>
+			<div className="flex justify-center">
+				<button className="font-mono bg-[#FB2576] hover:bg-purple-500 text-white font-bold py-2 px-4 rounded">Login to wallet</button>
+			</div>
 		</form>
 	)
 }
