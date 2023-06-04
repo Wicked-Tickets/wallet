@@ -1,14 +1,21 @@
 import Header from '@/components/loginAndSignUp/header'
 import Login from '@/components/loginAndSignUp/login'
-import Footer from '@/components/shared/footer'
+import Signup from '@/components/loginAndSignUp/signUp'
 import Image from 'next/image'
+import { useState } from 'react'
 
 export default function Home() {
+  const [showSignup, setShowSignup] = useState(false)
+
+  const handleShowSignUp = () => {
+    setShowSignup(!showSignup)
+  }
+
   return (
     <main
       className="min-h-screen p-24"
     >
-      <div className="flex flex-row z-10 w-full items-center justify-between font-mono text-lg lg:flex">
+      <div className="flex flex-row z-10 w-full items-center justify-between font-mono text-xl lg:flex">
         <h1 className="fixed left-0 top-0 flex w-full justify-center
          pb-6 pt-8 lg:static lg:w-auto  
          lg:p-4 lg:border-0">
@@ -35,7 +42,19 @@ export default function Home() {
       <div className="flex flex-col mt-56 relative place-items-center">
         <Header />
         <div className='lg:w-1/3'>
-          <Login />
+          {!showSignup 
+          ? <>
+              <p className='font-mono mt-8 text-md'>Don't have a public key? Create one{' '} 
+                <span className='text-purple-500 cursor-pointer' onClick={handleShowSignUp}>here</span>
+              </p>
+              <Login />
+            </> 
+          : <>
+              <p className='font-mono mt-8 text-md'>Already have a public key? Enter it{' '} 
+                <span className='text-purple-500 cursor-pointer' onClick={handleShowSignUp}>here</span>
+              </p>
+              <Signup />
+            </>}
         </div>
       </div>
     </main>
