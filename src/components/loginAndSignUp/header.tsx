@@ -4,6 +4,7 @@ const Header = () => {
 	return (
 		<>
 			<Image
+				className="m-auto"
 				src={"/skulls-back-skulls.png"}
 				alt="Wicked Craniums"
 				width={100}

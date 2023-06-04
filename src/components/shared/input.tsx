@@ -1,5 +1,5 @@
 interface IInput {
-	handleChange?: () => void
+	handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 	value: string
 	labelText: string
 	labelFor: string
@@ -21,7 +21,7 @@ const Input = (props: IInput) => {
 				{labelText}
 			</label>
 			<input
-				onChange={handleChange ? handleChange : () => {}}
+				onChange={handleChange}
 				value={value}
 				id={id}
 				name={name}

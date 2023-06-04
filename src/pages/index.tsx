@@ -31,7 +31,7 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <div className="relative place-items-center">
+      <div className="relative place-items-center md:w-1/3">
         <Header />
         <div>
           <Login />
