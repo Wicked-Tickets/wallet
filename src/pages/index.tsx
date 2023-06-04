@@ -5,9 +5,9 @@ import Image from 'next/image'
 export default function Home() {
   return (
     <main
-      className="flex min-h-screen flex-col items-center justify-between p-24"
+      className="min-h-screen p-24"
     >
-      <div className="z-10 w-full items-center justify-between font-mono text-lg lg:flex">
+      <div className="flex flex-row z-10 w-full items-center justify-between font-mono text-lg lg:flex">
         <h1 className="fixed left-0 top-0 flex w-full justify-center
          pb-6 pt-8 lg:static lg:w-auto  
          lg:p-4 lg:border-0">
@@ -31,9 +31,9 @@ export default function Home() {
           </a>
         </div>
       </div>
-      <div className="relative place-items-center md:w-1/3">
+      <div className="flex flex-col mt-56 relative place-items-center">
         <Header />
-        <div>
+        <div className='lg:w-1/3'>
           <Login />
         </div>
       </div>
