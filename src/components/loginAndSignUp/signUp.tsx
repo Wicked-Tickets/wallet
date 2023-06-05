@@ -1,5 +1,6 @@
 import { useState } from "react"
 import Input from "../shared/input"
+import signUp from "@/firebase/auth/signup"
 
 const Signup = () => {
 	const [email, setEmail] = useState('')
@@ -18,18 +19,27 @@ const Signup = () => {
 		setUsername(event.target.value)
 	}
 
+	const handleSignup = async () => {
+		const { result, error } = await signUp(email, passphrase)
+		if (error) {
+			return console.log(error)
+		}
+
+		console.log(result)
+	}
+
 	return (
-		<form className="mt-8 space-y-6">
+		<div className="mt-8 space-y-6">
 			<Input 
 				value = {username}
 				labelText = "Username"
 				labelFor = "username"
 				id = "username"
 				name = "username"
-				type = "username"
+				type = "text"
 				isRequired = { true }
 				placeholder= "Username"
-				handleChange={handleEmailAddress}
+				handleChange={handleUsername}
 			/>
 			<Input 
 				value = {email}
@@ -54,9 +64,11 @@ const Signup = () => {
 				handleChange={handlePassphrase}
 			/>
 			<div className="flex justify-center">
-				<button className="font-mono bg-[#FB2576] hover:bg-purple-500 text-white font-bold py-2 px-4 rounded">Signup to wallet</button>
+				<button className="font-mono bg-[#FB2576] hover:bg-purple-500 text-white font-bold py-2 px-4 rounded" onClick={handleSignup}>
+					Signup to wallet
+				</button>
 			</div>
-		</form>
+		</div>
 	)
 }
 
