@@ -1,6 +1,6 @@
 import { useState } from "react"
 import Input from "../shared/input"
-import signUp from "@/firebase/auth/signup"
+import signUp from "@/firebase/auth/signUp"
 
 const Signup = () => {
 	const [email, setEmail] = useState('')

@@ -45,7 +45,7 @@ export default function Home() {
         <div className='lg:w-1/3'>
           {!showSignup 
           ? <>
-              <p className='font-mono mt-8 text-md'>Don't have a public key? Create one{' '} 
+              <p className='font-mono mt-8 text-md'>Don&apos;t have a public key? Create one{' '} 
                 <span className='text-purple-500 cursor-pointer' onClick={handleShowSignUp}>here</span>
               </p>
               <Login />
