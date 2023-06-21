@@ -26,19 +26,8 @@ const Login = () => {
 				placeholder= "Email address"
 				handleChange={handleEmailAddress}
 			/>
-			<Input 
-				value = {passphrase}
-				labelText = "Passphrase"
-				labelFor = "passphrase"
-				id = "passphrase"
-				name = "passphrase"
-				type = "password"
-				isRequired = { true }
-				placeholder= "Passphrase"
-				handleChange={handlePassphrase}
-			/>
 			<div className="flex justify-center">
-				<button className="font-mono bg-[#FB2576] hover:bg-purple-500 text-white font-bold py-2 px-4 rounded">Login to wallet</button>
+				<button className="font-mono bg-[#FB2576] hover:bg-purple-500 text-white font-bold py-2 px-4 rounded">Send magic link</button>
 			</div>
 		</form>
 	)

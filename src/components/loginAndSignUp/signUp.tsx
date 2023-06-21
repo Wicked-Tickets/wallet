@@ -65,7 +65,7 @@ const Signup = () => {
 			/>
 			<div className="flex justify-center">
 				<button className="font-mono bg-[#FB2576] hover:bg-purple-500 text-white font-bold py-2 px-4 rounded" onClick={handleSignup}>
-					Signup to wallet
+					Create account
 				</button>
 			</div>
 		</div>
