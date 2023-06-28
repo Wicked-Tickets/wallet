@@ -1,6 +1,7 @@
 import { useState } from "react"
 import Input from "../shared/input"
 import { addUser } from "@/firebase/collections/user"
+import { error } from "console"
 
 const Signup = () => {
 	const [email, setEmail] = useState('')
@@ -14,7 +15,25 @@ const Signup = () => {
 			passprase: passphrase
 		}
 		
-		await addUser(user) 
+		const userRef = await addUser(user)
+		if (userRef?.id) {
+			const data = {
+				toEmail: email,
+				subjectEmail: "Welcome to your wallet",
+				bodyEmail: "Email to welcome you <3"
+			}
+			fetch("/api/email/sendEmail", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data)
+			}).then((res) => {
+				console.log("Email sent ", res)
+			}).catch((error) => {
+				console.log("Error while sending email ", error)
+			})
+		}
 	}
 
 	return (
