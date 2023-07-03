@@ -1,31 +1,39 @@
 import { useState } from "react"
 import Input from "../shared/input"
-import signUp from "@/firebase/auth/signUp"
+import { addUser } from "@/firebase/collections/user"
+import { error } from "console"
 
 const Signup = () => {
 	const [email, setEmail] = useState('')
 	const [passphrase, setPassphrase] = useState('')
 	const [username, setUsername] = useState('')
 
-	const handleEmailAddress = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setEmail(event.target.value)
-	}
-
-	const handlePassphrase = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setPassphrase(event.target.value)
-	}
-
-	const handleUsername = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setUsername(event.target.value)
-	}
-
 	const handleSignup = async () => {
-		const { result, error } = await signUp(email, passphrase)
-		if (error) {
-			return console.log(error)
+		const user : User = {
+			username: username,
+			email: email,
+			passprase: passphrase
 		}
-
-		console.log(result)
+		
+		const userRef = await addUser(user)
+		if (userRef?.id) {
+			const data = {
+				toEmail: email,
+				subjectEmail: "Welcome to your wallet",
+				bodyEmail: "Email to welcome you <3"
+			}
+			fetch("/api/email/sendEmail", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify(data)
+			}).then((res) => {
+				console.log("Email sent ", res)
+			}).catch((error) => {
+				console.log("Error while sending email ", error)
+			})
+		}
 	}
 
 	return (
@@ -38,8 +46,10 @@ const Signup = () => {
 				name = "username"
 				type = "text"
 				isRequired = { true }
-				placeholder= "Username"
-				handleChange={handleUsername}
+				placeholder = "Username"
+				handleChange = {
+					(event: React.ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)
+				}
 			/>
 			<Input 
 				value = {email}
@@ -49,8 +59,10 @@ const Signup = () => {
 				name = "email"
 				type = "email"
 				isRequired = { true }
-				placeholder= "Email address"
-				handleChange={handleEmailAddress}
+				placeholder = "Email address"
+				handleChange = {
+					(event: React.ChangeEvent<HTMLInputElement>) => setEmail(event.target.value)
+				}
 			/>
 			<Input 
 				value = {passphrase}
@@ -60,12 +72,18 @@ const Signup = () => {
 				name = "passphrase"
 				type = "password"
 				isRequired = { true }
-				placeholder= "Passphrase"
-				handleChange={handlePassphrase}
+				placeholder = "Passphrase"
+				handleChange = {
+					(event: React.ChangeEvent<HTMLInputElement>) => setPassphrase(event.target.value)
+				}
 			/>
 			<div className="flex justify-center">
-				<button className="font-mono bg-[#FB2576] hover:bg-purple-500 text-white font-bold py-2 px-4 rounded" onClick={handleSignup}>
-					Signup to wallet
+				<button
+					className="font-mono bg-[#FB2576] hover:bg-purple-500 disabled:opacity-50 disabled:hover:bg-[#FB2576] text-white font-bold py-2 px-4 rounded"
+					onClick={handleSignup}
+					disabled={!(username !== "" && passphrase !== "" && email !== "")}
+				>
+						Create account
 				</button>
 			</div>
 		</div>

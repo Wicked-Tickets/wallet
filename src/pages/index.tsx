@@ -45,14 +45,14 @@ export default function Home() {
         <div className='lg:w-1/3'>
           {!showSignup 
           ? <>
-              <p className='font-mono mt-8 text-md'>Don&apos;t have a public key? Create one{' '} 
+              <p className='font-mono mt-8 text-md'>Don&apos;t have an account? Create one{' '} 
                 <span className='text-purple-500 cursor-pointer' onClick={handleShowSignUp}>here</span>
               </p>
               <Login />
             </> 
           : <>
-              <p className='font-mono mt-8 text-md'>Already have a public key? Enter it{' '} 
-                <span className='text-purple-500 cursor-pointer' onClick={handleShowSignUp}>here</span>
+              <p className='font-mono mt-8 text-md'>Already have an account? {' '} 
+                <span className='text-purple-500 cursor-pointer' onClick={handleShowSignUp}>Login here</span>
               </p>
               <Signup />
             </>}
