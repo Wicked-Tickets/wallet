@@ -5,6 +5,7 @@ let client = new postmark.ServerClient(process.env.POSTMARK_API_TOKEN)
 
 export default async function handler(request: NextApiRequest,response: NextApiResponse) {
 	try {
+		console.log('API email')
 		client.sendEmail({
 			From: "derb@recklesslabs.co",
 			To: request.body.toEmail,
