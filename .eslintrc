@@ -1,0 +1,10 @@
+{
+  "extends": ["react-app", "plugin:react-hooks/recommended", "next/core-web-vitals"],
+  "rules": {
+    "no-duplicate-imports": "warn",
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "react-hooks/exhaustive-deps": "off",
+    "sort-imports": "off"
+  }
+}

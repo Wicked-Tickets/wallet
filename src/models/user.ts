@@ -1,5 +1,5 @@
 interface User {
-	email: string
-	username: string
-	passprase: string
+  email: string
+  username: string
+  passprase: string
 }
