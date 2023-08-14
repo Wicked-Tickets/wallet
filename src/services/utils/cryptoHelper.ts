@@ -1,3 +1,5 @@
+import { secp256k1 } from 'ethereum-cryptography/secp256k1.js'
+
 type KeyObject = {
   key: CryptoKey
   iv: ArrayBuffer
@@ -42,4 +44,9 @@ export async function decrypt(encryptedText: ArrayBuffer, keyObject: KeyObject) 
   const textDecoder = new TextDecoder('utf-8')
   const decryptedText = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: keyObject.iv }, keyObject.key, encryptedText)
   return textDecoder.decode(decryptedText)
+}
+
+export async function generatePublicKey_secp256k1(privateKey: Uint8Array) {
+  const publicKey = secp256k1.getPublicKey(privateKey)
+  return publicKey
 }
