@@ -1,4 +1,9 @@
-export async function PBKDF2(salt: string, password: string, keyLength: number) {
+type KeyObject = {
+  key: CryptoKey
+  iv: ArrayBuffer
+}
+
+export async function PBKDF2(salt: string, password: string, keyLength: number): Promise<ArrayBuffer> {
   const iterations = 1000000
   const hash = 'SHA-256'
   const textEncoder = new TextEncoder()
@@ -12,8 +17,7 @@ export async function PBKDF2(salt: string, password: string, keyLength: number) 
   return derivation
 }
 
-export async function getKey(derivation: ArrayBuffer) {
-  const ivlen = 16
+export async function getKey(derivation: ArrayBuffer): Promise<KeyObject> {
   const keylen = 32
   const derivedKey = derivation.slice(0, keylen)
   const iv = derivation.slice(keylen)
@@ -25,4 +29,17 @@ export async function getKey(derivation: ArrayBuffer) {
     key: importedEncryptionKey,
     iv: iv,
   }
+}
+
+export async function encrypt(text: string, keyObject: KeyObject): Promise<ArrayBuffer> {
+  const textEncoder = new TextEncoder()
+  const textBuffer = textEncoder.encode(text)
+  const encryptedText = await crypto.subtle.encrypt({ name: 'AES-CBC', iv: keyObject.iv }, keyObject.key, textBuffer)
+  return encryptedText
+}
+
+export async function decrypt(encryptedText: ArrayBuffer, keyObject: KeyObject) {
+  const textDecoder = new TextDecoder('utf-8')
+  const decryptedText = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: keyObject.iv }, keyObject.key, encryptedText)
+  return textDecoder.decode(decryptedText)
 }
