@@ -5,9 +5,10 @@ type KeyObject = {
   iv: ArrayBuffer
 }
 
-export async function PBKDF2(salt: string, password: string, keyLength: number): Promise<ArrayBuffer> {
+export async function stretchKey_PBKDF2(salt: string, password: string): Promise<ArrayBuffer> {
   const iterations = 1000000
   const hash = 'SHA-256'
+  const keyLength = 32
   const textEncoder = new TextEncoder()
   const passwordBuffer = textEncoder.encode(password)
   const importedKey = await crypto.subtle.importKey('raw', passwordBuffer, 'PBKDF2', false, ['deriveBits'])
@@ -19,7 +20,7 @@ export async function PBKDF2(salt: string, password: string, keyLength: number):
   return derivation
 }
 
-export async function getKey(derivation: ArrayBuffer): Promise<KeyObject> {
+export async function createAccountKeyMaster_AESCBC(derivation: ArrayBuffer): Promise<KeyObject> {
   const keylen = 32
   const derivedKey = derivation.slice(0, keylen)
   const iv = derivation.slice(keylen)
@@ -33,6 +34,17 @@ export async function getKey(derivation: ArrayBuffer): Promise<KeyObject> {
   }
 }
 
+export async function createAccountKeyIdentityPrivate_SHA256(accountKeyMaster: ArrayBuffer): Promise<ArrayBuffer> {
+  const accountKeyIdentityPrivate = await crypto.subtle.digest('SHA-256', accountKeyMaster)
+  return accountKeyIdentityPrivate
+}
+
+export async function generatePublicKey_secp256k1(accountKeyIdentityPrivate: ArrayBuffer) {
+  const publicKeyUint8Array = new Uint8Array(accountKeyIdentityPrivate)
+  const publicKey = secp256k1.getPublicKey(publicKeyUint8Array)
+  return publicKey
+}
+
 export async function encrypt(text: string, keyObject: KeyObject): Promise<ArrayBuffer> {
   const textEncoder = new TextEncoder()
   const textBuffer = textEncoder.encode(text)
@@ -44,9 +56,4 @@ export async function decrypt(encryptedText: ArrayBuffer, keyObject: KeyObject) 
   const textDecoder = new TextDecoder('utf-8')
   const decryptedText = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: keyObject.iv }, keyObject.key, encryptedText)
   return textDecoder.decode(decryptedText)
-}
-
-export async function generatePublicKey_secp256k1(privateKey: Uint8Array) {
-  const publicKey = secp256k1.getPublicKey(privateKey)
-  return publicKey
 }
