@@ -2,23 +2,39 @@ import { useState } from 'react'
 import Input from '../shared/input'
 import { sendEmail } from '@/services/api/email'
 import { addUser } from '@/services/api/user'
+import {
+  createAccountKeyIdentityPrivate_SHA256,
+  createAccountKeyMaster_AESCBC,
+  decrypt,
+  encrypt,
+  generatePublicKey_secp256k1,
+  stretchKey_PBKDF2,
+} from '@/services/utils/cryptoHelper'
+import { useRouter } from 'next/router'
 
 const Signup = () => {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [passphrase, setPassphrase] = useState('')
+  const [salt, setSalt] = useState('')
   const [username, setUsername] = useState('')
 
   const handleSignup = async () => {
+    const stretchedKey = await stretchKey_PBKDF2(salt, passphrase)
+    const accountKeyMaster = await createAccountKeyMaster_AESCBC(stretchedKey)
+    localStorage.setItem('passphrase', passphrase)
+    localStorage.setItem('salt', salt)
     const user: User = {
       username: username,
       email: email,
       passprase: passphrase,
+      salt: salt,
     }
-    debugger
     const addUserResponse = await addUser(user)
     if (addUserResponse.ok) {
-      await sendEmail(user.email, 'Welcome to your wallet', 'Email to welcome you 😎')
+      await sendEmail(user.email, 'Welcome to your wallet', 'Email to welcome you 😎, please verify your account')
     }
+    router.push('/verifyUser')
   }
 
   return (
@@ -55,6 +71,17 @@ const Signup = () => {
         isRequired={true}
         placeholder="Passphrase"
         handleChange={(event: React.ChangeEvent<HTMLInputElement>) => setPassphrase(event.target.value)}
+      />
+      <Input
+        value={salt}
+        labelText="Salt"
+        labelFor="salt"
+        id="salt"
+        name="salt"
+        type="password"
+        isRequired={true}
+        placeholder="Salt"
+        handleChange={(event: React.ChangeEvent<HTMLInputElement>) => setSalt(event.target.value)}
       />
       <div className="flex justify-center">
         <button

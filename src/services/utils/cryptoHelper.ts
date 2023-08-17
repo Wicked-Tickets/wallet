@@ -21,10 +21,9 @@ export async function stretchKey_PBKDF2(salt: string, password: string): Promise
 }
 
 export async function createAccountKeyMaster_AESCBC(derivation: ArrayBuffer): Promise<KeyObject> {
-  const keylen = 32
-  const derivedKey = derivation.slice(0, keylen)
-  const iv = derivation.slice(keylen)
-  const importedEncryptionKey = await crypto.subtle.importKey('raw', derivedKey, { name: 'AES-CBC' }, false, [
+  const keylen = 16
+  const iv = derivation.slice(0, keylen)
+  const importedEncryptionKey = await crypto.subtle.importKey('raw', iv, { name: 'AES-CBC' }, false, [
     'encrypt',
     'decrypt',
   ])
@@ -45,6 +44,37 @@ export async function generatePublicKey_secp256k1(accountKeyIdentityPrivate: Arr
   return publicKey
 }
 
+export async function signMessage(privateKey: CryptoKey, message: string): Promise<ArrayBuffer> {
+  const textEncoder = new TextEncoder()
+  const textBuffer = textEncoder.encode(message)
+  const signature = await window.crypto.subtle.sign(
+    {
+      name: 'AES-CBC',
+      hash: { name: 'SHA-256' },
+    },
+    privateKey,
+    textBuffer
+  )
+
+  return signature
+}
+
+export async function verifyMessage(publicKey: CryptoKey, signature: ArrayBuffer, message: string): Promise<boolean> {
+  const textEncoder = new TextEncoder()
+  const textBuffer = textEncoder.encode(message)
+  let result = await window.crypto.subtle.verify(
+    {
+      name: 'AES-CBC',
+      hash: { name: 'SHA-256' },
+    },
+    publicKey,
+    signature,
+    textBuffer
+  )
+
+  return result
+}
+
 export async function encrypt(text: string, keyObject: KeyObject): Promise<ArrayBuffer> {
   const textEncoder = new TextEncoder()
   const textBuffer = textEncoder.encode(text)
@@ -52,7 +82,7 @@ export async function encrypt(text: string, keyObject: KeyObject): Promise<Array
   return encryptedText
 }
 
-export async function decrypt(encryptedText: ArrayBuffer, keyObject: KeyObject) {
+export async function decrypt(encryptedText: ArrayBuffer, keyObject: KeyObject): Promise<string> {
   const textDecoder = new TextDecoder('utf-8')
   const decryptedText = await crypto.subtle.decrypt({ name: 'AES-CBC', iv: keyObject.iv }, keyObject.key, encryptedText)
   return textDecoder.decode(decryptedText)

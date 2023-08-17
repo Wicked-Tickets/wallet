@@ -3,7 +3,6 @@ export const addUser = async (user: User) => {
   const data = {
     user: user,
   }
-  debugger
   const response = await fetch(url, {
     method: 'POST',
     headers: {
@@ -11,7 +10,6 @@ export const addUser = async (user: User) => {
     },
     body: JSON.stringify(data),
   })
-  debugger
 
   return response
 }
